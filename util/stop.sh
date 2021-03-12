@@ -8,17 +8,16 @@ stop_program_by_name() {
             /parameters/ { parameters = $2 }
             END { print program " " parameters }
         ')
-
-        processes=$(
+        stop_cmd=$(
             echo "$running_processes" |
                 grep "$start_cmd" |
                 awk '{ print "kill -9 " $1 }'
         )
-        [ "$processes" ] || {
+        [ "$stop_cmd" ] || {
             echo "Provided program: [$name] hasn't started."
             continue
         }
-        eval "$processes"
+        eval "$stop_cmd"
     done
 }
 
