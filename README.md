@@ -17,7 +17,6 @@ OPTION
     -g          group, followed by multiple group names
 
 ARGS            multiple group names or program names
-EOF
 ```
 
 ## Examples
