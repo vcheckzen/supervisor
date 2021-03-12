@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-CONFIG_FILE="./process.cfg"
+CONFIG_FILE="./programs.cfg"
 AWK_OUT_PUT="./util/output.awk"
 
 [ -e "$CONFIG_FILE" ] || {
