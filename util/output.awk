@@ -17,7 +17,7 @@ function cal_cols_format(titles, cols_prop)
 function print_line(line)
 {
     printf " "
-    for (kcf in cols_fmt)
+    for (kcf = 1; kcf <= length(cols_fmt); kcf++)
         printf cols_fmt[kcf], line[kcf]
 }
 
