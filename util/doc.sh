@@ -2,17 +2,17 @@
 
 help() {
     cat <<EOF
-Supervisor: manager multiple programs by groups.
+Supervisor: manage multiple programs by groups.
 Usage: ./main.sh [COMMAND] [OPTION] [ARGS]...
 
 COMMAND
     start       start programs by groups or names
-    stop        start programs by groups or names
+    stop        stop programs by groups or names
     status      print process running status by groups or names
 
 OPTION
-    -g          group, followed by multiple group names
+    -g          group, followed by a group name
 
-ARGS            multiple group names or program names
+ARGS            multiple groups or program names
 EOF
 }

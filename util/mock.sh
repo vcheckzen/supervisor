@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 
-source "./util.sh"
+# shellcheck disable=SC1091
+source "$BASE_DIR/util/util.sh"
+
+[ -d "$BASE_DIR/log" ] || mkdir "$BASE_DIR/log"
 
 for group in $(get_config_items GROUP); do
     for prog in $(get_config_items "$group"); do
-        for config in "$(get_config_items "$prog")"; do
-            log=$(echo "$config" | awk '/parameters/ { print $2 }')
-            [ -e "$log" ] || touch "../$log"
-        done
+        log=$(get_config_items "$prog" | awk '/parameters/ { print $2 }')
+        [ -e "$log" ] || touch "$BASE_DIR/$log"
     done
 done

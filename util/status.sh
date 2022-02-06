@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 
 get_processes_by_name() {
-    name="$1"
-    group="$2"
+    local name="$1"
+    local group="$2"
     local pinfos
 
-    pinfo=$(echo "$running_processes" | grep "$name")
-    [ "$pinfo" ] && {
+    # shellcheck disable=SC2154
+    pinfo=$(echo "$running_processes" | grep "$(gen_program_start_cmd "$name")")
+    if [ "$pinfo" ]; then
         # -r interpret \n
         while read -r line; do
             pinfos="$pinfos\n$name $group RUNNING $line"
         done < <(echo "$pinfo")
-    } || {
+    else
         pinfos="$pinfos\n$name $group STOPPED NULL NULL NULL NULL"
-    }
+    fi
 
     echo -n "${pinfos#*\n}"
 }
@@ -30,7 +31,7 @@ print_processes_by_names() {
     done
 
     echo -ne "${pinfos#*\n}" |
-        awk -r -v cols=$(tput cols) -f "$AWK_OUT_PUT"
+        awk -v cols="$(tput cols)" -f "$AWK_OUT_PUT"
 }
 
 get_processes_by_group() {
@@ -53,5 +54,5 @@ print_processes_by_groups() {
     done
 
     echo -ne "${pinfos#*\n}" |
-        awk -r -v cols=$(tput cols) -f "$AWK_OUT_PUT"
+        awk -v cols="$(tput cols)" -f "$AWK_OUT_PUT"
 }

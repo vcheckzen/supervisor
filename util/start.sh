@@ -1,19 +1,15 @@
 #!/usr/bin/env bash
 
 start_program_by_name() {
-    name="$1"
-    for config in "$(get_config_items "$name")"; do
-        start_cmd=$(echo "$config" | awk -v FS== '
-            /program/ { program = $2 }
-            /parameters/ { parameters = $2 }
-            END { print program " " parameters }
-        ')
-        [ "$(echo "$running_processes" | grep "$start_cmd")" ] && {
-            echo "Provided program: [$name] already started."
-            continue
-        }
-        eval "nohup $start_cmd &>/dev/null &"
-    done
+    local name="$1"
+    local start_cmd
+    start_cmd=$(gen_program_start_cmd "$name")
+    # shellcheck disable=SC2154
+    echo "$running_processes" | grep -q "$start_cmd" && {
+        echo "Provided program: [$name] already started."
+        return 1
+    }
+    eval "nohup $start_cmd &>/dev/null &"
 }
 
 start_programs_by_names() {
@@ -28,6 +24,7 @@ start_programs_by_names() {
 }
 
 start_programs_by_group() {
+    # shellcheck disable=SC2046
     start_programs_by_names $(get_config_items "$1")
 }
 

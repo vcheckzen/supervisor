@@ -1,27 +1,27 @@
 # Supervisor
 
-Manager multiple programs by groups, working on all unix-like systems. Just a demo, do not use in production.
+Manage multiple programs by groups, working on all unix-like systems. Just a demo, do not use in production.
 
 ## Usage
 
 ```bash
-Supervisor: manager multiple programs by groups.
+Supervisor: manage multiple programs by groups.
 Usage: ./main.sh [COMMAND] [OPTION] [ARGS]...
 
 COMMAND
     start       start programs by groups or names
-    stop        start programs by groups or names
+    stop        stop programs by groups or names
     status      print process running status by groups or names
 
 OPTION
-    -g          group, followed by multiple group names
+    -g          group, followed by a group name
 
-ARGS            multiple group names or program names
+ARGS            multiple groups or program names
 ```
 
 ## Examples
 
-### Start all programs in config file
+### Start all programs in the config file
 
 ```bash
 ➜  supervisor git:(master) ./main.sh start
@@ -65,7 +65,7 @@ ARGS            multiple group names or program names
  mysql           DB              RUNNING 12680   0.0     0.0        Fri Mar 12 21:07:55 2021
 ```
 
-### Stop all programs in config file
+### Stop all programs in the config file
 
 ```bash
 ➜  supervisor git:(master) ./main.sh stop

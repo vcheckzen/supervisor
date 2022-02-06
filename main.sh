@@ -1,26 +1,37 @@
 #!/usr/bin/env bash
 
-CONFIG_FILE="./programs.cfg"
-AWK_OUT_PUT="./util/output.awk"
+BASE_DIR=$(dirname "$0")
+export BASE_DIR
+
+CONFIG_FILE="$BASE_DIR/programs.cfg"
+# shellcheck disable=SC2034
+AWK_OUT_PUT="$BASE_DIR/util/output.awk"
 
 [ -e "$CONFIG_FILE" ] || {
     echo "Config file: [$CONFIG_FILE] does not exist."
     exit 1
 }
 
-source "./util/doc.sh"
-source "./util/util.sh"
-source "./util/start.sh"
-source "./util/stop.sh"
-source "./util/status.sh"
+# shellcheck disable=SC1091
+source "$BASE_DIR/util/doc.sh"
+# shellcheck disable=SC1091
+source "$BASE_DIR/util/util.sh"
+# shellcheck disable=SC1091
+source "$BASE_DIR/util/start.sh"
+# shellcheck disable=SC1091
+source "$BASE_DIR/util/stop.sh"
+# shellcheck disable=SC1091
+source "$BASE_DIR/util/status.sh"
 
 retrieve_running_processes
 case $1 in
 start)
     case $2 in
     "")
+        # shellcheck disable=SC2046
         start_programs_by_groups $(get_config_items GROUP)
         retrieve_running_processes
+        # shellcheck disable=SC2046
         print_processes_by_groups $(get_config_items GROUP)
         ;;
     -g)
@@ -41,8 +52,10 @@ start)
 stop)
     case $2 in
     "")
+        # shellcheck disable=SC2046
         stop_programs_by_groups $(get_config_items GROUP)
         retrieve_running_processes
+        # shellcheck disable=SC2046
         print_processes_by_groups $(get_config_items GROUP)
         ;;
     -g)
@@ -63,6 +76,7 @@ stop)
 status)
     case $2 in
     "")
+        # shellcheck disable=SC2046
         print_processes_by_groups $(get_config_items GROUP)
         ;;
     -g)
@@ -75,6 +89,10 @@ status)
         print_processes_by_names "$@"
         ;;
     esac
+    ;;
+mock)
+    # shellcheck disable=SC1091
+    source "$BASE_DIR/util/mock.sh"
     ;;
 *)
     help

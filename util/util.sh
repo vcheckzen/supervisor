@@ -33,8 +33,17 @@ retrieve_running_processes() {
     # $# represents gapsgth of parameters
     # $0 represents name of this script
     # $$ represents pid of this script
-    pcmd="ps --no-headers -eo pid,pcpu,pmem,lstart,args"
+    local pcmd="ps --no-headers -eo pid,pcpu,pmem,lstart,args"
     running_processes=$(
         eval "$pcmd" | grep -vE "($0|grep|$pcmd)"
     )
+    export running_processes
+}
+
+gen_program_start_cmd() {
+    get_config_items "$1" | awk -v FS== '
+        /program/ { program = $2 }
+        /parameters/ { parameters = $2 }
+        END { print program " " parameters }
+    '
 }

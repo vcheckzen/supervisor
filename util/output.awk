@@ -1,31 +1,32 @@
-function print_divider()
+function print_divider(    i)
 {
-    for (x = 0; x < cols; x++) printf "="
+    for (i = 0; i < cols; i++) printf "="
 }
 
-function cal_cols_format(titles, cols_prop)
+function cal_cols_format(   i, len)
 {
-    for (kcp in cols_prop) props_sum += cols_prop[kcp]
-    for (i = 1; i < length(titles); i++) {
+    for (len in cols_prop) props_sum += cols_prop[len]
+    for (i in titles) {
+        if (i == len) break
         needed_cols = int(cols_prop[i] / props_sum * (cols - 1))
         used_cols += needed_cols
         cols_fmt[i] = "%-" needed_cols "s"
     }
-    cols_fmt[i] = "%" cols - used_cols - 2 "s\n"
+    cols_fmt[len] = "%" cols - used_cols - 2 "s\n"
 }
 
-function print_line(line)
+function print_line(line    ,i)
 {
     printf " "
-    for (kcf = 1; kcf <= length(cols_fmt); kcf++)
-        printf cols_fmt[kcf], line[kcf]
+    for (i in cols_fmt)
+        printf cols_fmt[i], line[i]
 }
 
 BEGIN {
     split("2 2 1 1 1 1 3", cols_prop)
     split("PROCESS_NAME GROUP STATUS PID CPU MEM START_TIME", titles)
 
-    cal_cols_format(titles, cols_prop)
+    cal_cols_format()
     print_divider()
     print_line(titles)
     print_divider()

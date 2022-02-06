@@ -1,24 +1,19 @@
 #!/usr/bin/env bash
 
 stop_program_by_name() {
-    name="$1"
-    for config in "$(get_config_items "$name")"; do
-        start_cmd=$(echo "$config" | awk -v FS== '
-            /program/ { program = $2 }
-            /parameters/ { parameters = $2 }
-            END { print program " " parameters }
-        ')
-        stop_cmd=$(
-            echo "$running_processes" |
-                grep "$start_cmd" |
-                awk '{ print "kill -9 " $1 }'
-        )
-        [ "$stop_cmd" ] || {
-            echo "Provided program: [$name] hasn't started."
-            continue
-        }
-        eval "$stop_cmd"
-    done
+    local name="$1"
+    local stop_cmd
+    # shellcheck disable=SC2154
+    stop_cmd=$(
+        echo "$running_processes" |
+            grep "$(gen_program_start_cmd "$name")" |
+            awk '{ print "kill -9 " $1 }'
+    )
+    [ "$stop_cmd" ] || {
+        echo "Provided program: [$name] hasn't started."
+        return 1
+    }
+    eval "$stop_cmd"
 }
 
 stop_programs_by_names() {
@@ -33,6 +28,7 @@ stop_programs_by_names() {
 }
 
 stop_programs_by_group() {
+    # shellcheck disable=SC2046
     stop_programs_by_names $(get_config_items "$1")
 }
 
